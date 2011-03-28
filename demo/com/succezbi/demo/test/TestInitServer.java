@@ -17,7 +17,7 @@ public class TestInitServer extends TestCase {
 		int count = engine.getEntityCountByType("SBIServer");
 		String id = null;
 		if (count == 0) {
-			MetaDataEntity server = engine.createNewEntity("SBIServer", "SBIServer");
+			MetaDataEntity server = engine.createNewEntity("SBIServer", "SBIServer", "root");
 			server.setProperty("caption", "SBI主服务器");
 			server.setProperty("version", "0.0.1");
 			server.setProperty("ip", "192.168.0.1");

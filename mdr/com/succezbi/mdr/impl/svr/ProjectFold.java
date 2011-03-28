@@ -12,7 +12,7 @@ import com.succezbi.mdr.impl.abs.Namespace;
 public class ProjectFold extends Namespace{
 
 	protected ProjectFold(Project parent, String name) {
-		super(parent, name);
+		super(null, name);
 	}
 
 	@Override

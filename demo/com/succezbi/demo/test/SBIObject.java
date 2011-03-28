@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Map;
 
 import com.succezbi.mdr.api.MetaDataEntity;
-import com.succezbi.mdr.api.impl.MetaDataEntityImpl;
 
 public abstract class SBIObject implements Serializable{
 
@@ -13,11 +12,12 @@ public abstract class SBIObject implements Serializable{
 	protected MetaDataEntity meta = null;
 	
 	public SBIObject(Class<?> cls) {
-		this.meta = new MetaDataEntityImpl();
+		//this.meta = new MetaDataEntityImpl();
 	}
 	
 	protected MetaDataEntity createEmptyMetaDataEntity(){
-		return new MetaDataEntityImpl();
+		//return new MetaDataEntityImpl();
+		return null;
 	}
 	
 	public String getResourceId(){
@@ -25,7 +25,8 @@ public abstract class SBIObject implements Serializable{
 		String uid = this.meta.getID();
 		String type = this.meta.getType();
 		String name = this.meta.getName();
-		return new SBIResourceId(parent, uid, type, name, resourceObj);
+		//return new SBIResourceId(parent, uid, type, name, resourceObj);
+		return null;
 	}
 	
 	public String getId(){
@@ -42,11 +43,11 @@ public abstract class SBIObject implements Serializable{
 	}
 
 	public int getIntegerProperty(String key){
-		return this.meta.getIntegerProperty(key);
+		return this.meta.getIntProperty(key);
 	}
 
 	public boolean getBooleanProperty(String key){
-		return this.meta.getBooleanProperty(key);
+		return this.meta.getBoolProperty(key);
 	}
 
 	public String getStringProperty(String key){
@@ -54,7 +55,7 @@ public abstract class SBIObject implements Serializable{
 	}
 
 	public void addProperty(String key, Object object){
-		this.meta.addProperty(key, object);
+		this.meta.setProperty(key, object);
 	}
 
 	public void removeProperty(String key){

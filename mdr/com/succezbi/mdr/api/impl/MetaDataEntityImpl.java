@@ -191,4 +191,69 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 		
 	}
 
+	public boolean isConsist() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public int getIntProperty(String key, int dfvalue) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getIntProperty(String key) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void setIntProperty(String key, int value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean getBoolProperty(String key, boolean dfvalue) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean getBoolProperty(String key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void setBoolProperty(String key, boolean value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setStringProperty(String key, String value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void getImportedEntities() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getAliasNameById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getIdByAliasName(String aliasname) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String hasAliasName(String aliasname) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void getImportingEntities() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
