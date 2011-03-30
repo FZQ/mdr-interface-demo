@@ -1,8 +1,10 @@
-package com.succezbi.mdr.impl.abs;
+package com.succezbi.mdr.impl.core;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.succezbi.mdr.impl.metamodel.MetaExtent;
 
 @Entity
 public abstract class Feature extends ModelElement {
@@ -11,8 +13,8 @@ public abstract class Feature extends ModelElement {
 	@JoinColumn(name = "ClassifierID")
 	private Classifier classifier = null;
 
-	public Feature(ModelElement parent, String name) {
-		super(parent, name);
+	public Feature(MetaExtent extent, ModelElement parent, String name) {
+		super(extent, parent, name);
 	}
 
 	public void setClassifier(Classifier classifier) {

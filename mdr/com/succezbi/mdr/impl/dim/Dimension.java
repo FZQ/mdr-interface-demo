@@ -6,20 +6,21 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.criterion.DetachedCriteria;
 
-import com.succezbi.mdr.impl.abs.Feature;
-import com.succezbi.mdr.impl.abs.ModelElement;
-import com.succezbi.mdr.impl.svr.Project;
+import com.succezbi.mdr.impl.core.Feature;
+import com.succezbi.mdr.impl.core.ModelElement;
+import com.succezbi.mdr.impl.metamodel.MetaExtent;
+import com.succezbi.mdr.impl.svr.SBIProject;
 
 @Entity(name="Dimension")
 public class Dimension extends Feature{
 	
-	public Dimension(ModelElement parent, String name) {
-		super(parent, name);
+	public Dimension(MetaExtent extent, ModelElement parent, String name) {
+		super(extent, parent, name);
 	}
 
 	@ManyToOne
 	@JoinColumn(name="ProjectID")
-	private Project project = null;
+	private SBIProject project = null;
 
 	@Override
 	protected String getEntityName() {
@@ -31,11 +32,11 @@ public class Dimension extends Feature{
 		return null;
 	}
 
-	public void setProject(Project project) {
+	public void setProject(SBIProject project) {
 		this.project = project;
 	}
 
-	public Project getProject() {
+	public SBIProject getProject() {
 		return project;
 	}
 }

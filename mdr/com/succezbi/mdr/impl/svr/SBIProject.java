@@ -2,12 +2,13 @@ package com.succezbi.mdr.impl.svr;
 
 import org.hibernate.criterion.DetachedCriteria;
 
-import com.succezbi.mdr.impl.abs.ModelElement;
+import com.succezbi.mdr.impl.core.ModelElement;
+import com.succezbi.mdr.impl.metamodel.MetaExtent;
 
-public class Project extends ModelElement{
+public class SBIProject extends ModelElement{
 
-	protected Project(SBIServer parent, String name) {
-		super(parent, name);
+	protected SBIProject(MetaExtent extent, SBIServer parent, String name) {
+		super(extent, parent, name);
 	}
 
 	@Override

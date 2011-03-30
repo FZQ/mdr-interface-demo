@@ -1,4 +1,4 @@
-package com.succezbi.mdr.impl.abs;
+package com.succezbi.mdr.impl.core;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +12,8 @@ import javax.persistence.MapKey;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.succezbi.mdr.impl.metamodel.MetaExtent;
+
 /**
  * ModelElement，ModelElement可以与其他ModelElement组成树，ModelElement组成树的方式
  * 一般是按照不同类型的ModelElement在不同的层次形式组成的，也就是不会存在一个类型的
@@ -24,11 +26,12 @@ import javax.persistence.UniqueConstraint;
 @Table(uniqueConstraints = { @UniqueConstraint(name = "uniquename", columnNames = "name") })
 public abstract class ModelElement extends MetaObject {
 
-	public ModelElement(ModelElement parent, String name) {
-		this(parent, name, new HashMap());
+	public ModelElement(MetaExtent extent, ModelElement parent, String name) {
+		this(extent, parent, name, new HashMap());
 	}
 	
-	public ModelElement(ModelElement parent, String name, Map properties){
+	public ModelElement(MetaExtent extent, ModelElement parent, String name, Map properties){
+		super(extent);
 		this.setParent(parent);
 		this.setName(name);
 		this.setProperties(properties);

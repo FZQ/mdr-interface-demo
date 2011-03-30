@@ -2,21 +2,31 @@ package com.succezbi.mdr.api.impl;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+
 import com.succezbi.mdr.api.MetaDataEntity;
+import com.succezbi.mdr.impl.metamodel.MetaExtent;
 
 public class MetaDataEntityImpl implements MetaDataEntity{
-
+	
 	private String id = null;
 	private String type = null;
+	private MetaExtent extent = null;
 	
-	public MetaDataEntityImpl(String type) {
-		if(this.type == null){
+	private HashMap map = new HashMap();
+	
+	public MetaDataEntityImpl(MetaExtent extent, String type) {
+		if(type == null){
 			throw new RuntimeException("MetaDataEntity必须有类型");
 		}
 		this.type = type;
+		this.extent = extent;
 	}
 	
 	public String getID() {
@@ -29,13 +39,23 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 
 	public String getName() {
 		String hql = "select obj.name from ModelElement as obj where id=:id";
-		
-		
-		return null;
+		Session session = this.extent.getSession();
+		Query query = session.createQuery(hql);
+		List list = query.list();
+		int size = list.size();
+		if(size == 1){
+			return (String) list.get(0);
+		}else{
+			if(size <= 0){
+				throw new RuntimeException();
+			}else{
+				throw new RuntimeException();
+			}
+		}
 	}
 
 	public String getType() {
-		return null;
+		return this.type;
 	}
 
 	public String getParentID() {
@@ -51,17 +71,14 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 	}
 
 	public String[] getChilds() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public int getChildsCount() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	public Iterator getChildsIterator() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -141,98 +158,72 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 		return null;
 	}
 
-	public int getIntegerProperty(String key, int dfvalue) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public int getIntegerProperty(String key) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public boolean getBooleanProperty(String key, boolean dfvalue) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean getBooleanProperty(String key) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public String getStringProperty(String key, String dfvalue) {
-		// TODO Auto-generated method stub
-		return null;
+		if(!map.containsKey(key)){
+			return dfvalue;
+		}
+		return (String) map.get(key);
 	}
 
 	public String getStringProperty(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return (String) map.get(key);
 	}
 
-	public void addProperty(String key, Object object) {
-		// TODO Auto-generated method stub
-		
+	public void addProperty(String key, Object value) {
+		map.put(key, value);
 	}
 
 	public void removeProperty(String key) {
-		// TODO Auto-generated method stub
-		
+		map.remove(key);
 	}
 
 	public boolean hasProperty(String key) {
-		// TODO Auto-generated method stub
-		return false;
+		return map.containsKey(key);
 	}
 
 	public void setProperty(String String, Object obj) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public boolean isConsist() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public int getIntProperty(String key, int dfvalue) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(!map.containsKey(key)){
+			return dfvalue;
+		}
+		return (Integer) map.get(key);
 	}
 
 	public int getIntProperty(String key) {
-		// TODO Auto-generated method stub
-		return 0;
+		return (Integer) map.get(key);
 	}
 
 	public void setIntProperty(String key, int value) {
-		// TODO Auto-generated method stub
-		
+		map.put(key, value);
 	}
 
 	public boolean getBoolProperty(String key, boolean dfvalue) {
-		// TODO Auto-generated method stub
-		return false;
+		if(!map.containsKey(key)){
+			return dfvalue;
+		}
+		return (Boolean) map.get(key);
 	}
 
 	public boolean getBoolProperty(String key) {
-		// TODO Auto-generated method stub
-		return false;
+		return (Boolean) map.get(key);
 	}
 
 	public void setBoolProperty(String key, boolean value) {
-		// TODO Auto-generated method stub
-		
+		map.put(key, value);
 	}
 
 	public void setStringProperty(String key, String value) {
-		// TODO Auto-generated method stub
-		
+		map.put(key, value);
 	}
 
 	public void getImportedEntities() {
-		// TODO Auto-generated method stub
 		
 	}
 

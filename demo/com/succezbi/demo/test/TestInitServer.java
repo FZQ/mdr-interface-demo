@@ -1,6 +1,7 @@
 package com.succezbi.demo.test;
 
 import junit.framework.TestCase;
+import server.ServerRegister;
 
 import com.succezbi.mdr.api.MDRApiFactory;
 import com.succezbi.mdr.api.MetaDataEngine;
@@ -12,8 +13,11 @@ public class TestInitServer extends TestCase {
 
 	/**
 	 * 测试初始化服务器
+	 * @throws Exception 
 	 */
-	public void testInitServer() {
+	public void testInitServer() throws Exception {
+		ServerRegister sr = new ServerRegister();
+		sr.register();
 		int count = engine.getEntityCountByType("SBIServer");
 		String id = null;
 		if (count == 0) {

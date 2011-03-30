@@ -1,4 +1,4 @@
-package com.succezbi.mdr.impl.abs;
+package com.succezbi.mdr.impl.core;
 
 import java.util.Iterator;
 
@@ -9,7 +9,7 @@ import javax.persistence.Transient;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import com.succezbi.util.HibernateUtil;
+import com.succezbi.mdr.impl.metamodel.MetaExtent;
 
 @Entity(name="Namespace")
 public abstract class Namespace extends ModelElement {
@@ -23,14 +23,14 @@ public abstract class Namespace extends ModelElement {
 	@Transient
 	private String entityname = null;
 
-	protected Namespace(Namespace parent, String name) {
-		super(parent, name);
+	protected Namespace(MetaExtent extent, Namespace parent, String name) {
+		super(extent, parent, name);
 		this.entityname = this.getEntityName();
 	}
 
 	public Namespace getParent() {
 		//查询LET<this.left,RGT>this.RGT，则得到全部的父节点，其中RGT最小的是直接父节点
-		Session session = HibernateUtil.getSession();
+		Session session = this.getExtent().getSession();
 		try {
 			StringBuffer sb = new StringBuffer();
 			sb.append("from ").append(entityname).append(" where LFT<").append(this.getLeft()).append(" and RGT > ").append(
@@ -67,7 +67,7 @@ public abstract class Namespace extends ModelElement {
 	}
 	
 	public String getAbsolutePath() {
-		Session session = HibernateUtil.getSession();
+		Session session = this.getExtent().getSession();
 		String entityname = this.getEntityName();
 		StringBuffer sb = new StringBuffer(30);
 		sb.append("from ").append(entityname);
@@ -96,8 +96,7 @@ public abstract class Namespace extends ModelElement {
 
 
 	public Namespace getRoot() {
-		Session session = HibernateUtil.getSession();
-		session = HibernateUtil.getSession();
+		Session session = this.getExtent().getSession();
 		return null;
 	}
 

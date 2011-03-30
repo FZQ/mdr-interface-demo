@@ -4,13 +4,14 @@ import javax.persistence.Entity;
 
 import org.hibernate.criterion.DetachedCriteria;
 
-import com.succezbi.mdr.impl.abs.Classifier;
+import com.succezbi.mdr.impl.core.Classifier;
+import com.succezbi.mdr.impl.metamodel.MetaExtent;
 
 @Entity
 public class Jdbc extends Classifier{
 
-	protected Jdbc(SBIServer parent, String name) {
-		super(parent, name);
+	protected Jdbc(MetaExtent extent, SBIServer parent, String name) {
+		super(extent, parent, name);
 	}
 
 	@Override

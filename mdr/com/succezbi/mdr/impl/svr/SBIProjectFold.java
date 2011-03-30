@@ -5,14 +5,15 @@ import javax.persistence.Table;
 
 import org.hibernate.criterion.DetachedCriteria;
 
-import com.succezbi.mdr.impl.abs.Namespace;
+import com.succezbi.mdr.impl.core.Namespace;
+import com.succezbi.mdr.impl.metamodel.MetaExtent;
 
 @Entity(name="ProjectFold")
 @Table(name="ProjectFold")
-public class ProjectFold extends Namespace{
+public class SBIProjectFold extends Namespace{
 
-	protected ProjectFold(Project parent, String name) {
-		super(null, name);
+	protected SBIProjectFold(MetaExtent extent, SBIProject parent, String name) {
+		super(extent, null, name);
 	}
 
 	@Override

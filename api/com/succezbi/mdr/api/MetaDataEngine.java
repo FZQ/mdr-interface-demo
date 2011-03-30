@@ -1,8 +1,11 @@
 package com.succezbi.mdr.api;
 
+import java.io.InputStream;
+
 public interface MetaDataEngine {
 	
-	public void register(String xml);
+	public void register(String xml) throws Exception;
+	public void register(InputStream is) throws Exception;
 	
 	/**
 	 * 创建一个新的MetaDataEntity
