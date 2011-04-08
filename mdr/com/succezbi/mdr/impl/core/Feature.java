@@ -6,7 +6,7 @@ import javax.persistence.ManyToOne;
 
 import com.succezbi.mdr.impl.metamodel.MetaExtent;
 
-@Entity
+@Entity(name="Feature")
 public abstract class Feature extends ModelElement {
 
 	@ManyToOne

@@ -15,32 +15,33 @@ import com.succezbi.mdr.impl.metamodel.MetaExtent;
 
 public class MetaDataEntityImpl implements MetaDataEntity{
 	
-	private String id = null;
-	private String type = null;
 	private MetaExtent extent = null;
 	
 	private HashMap map = new HashMap();
 	
-	public MetaDataEntityImpl(MetaExtent extent, String type) {
-		if(type == null){
-			throw new RuntimeException("MetaDataEntity必须有类型");
-		}
-		this.type = type;
+	private MetaDataEntityCache cache = null;
+	
+	private String type = null;
+	private String name = null;
+	
+	public MetaDataEntityImpl(MetaExtent extent) {
+		this.cache = new MetaDataEntityCache();
 		this.extent = extent;
 	}
 	
 	public String getID() {
-		return this.id;
+		return this.cache.getID();
 	}
 	
-	protected void setID(String id){
-		
+	protected void setId(String id){
+		this.cache.setId(id);
 	}
 
 	public String getName() {
 		String hql = "select obj.name from ModelElement as obj where id=:id";
 		Session session = this.extent.getSession();
 		Query query = session.createQuery(hql);
+		query.setString("id", this.getID());
 		List list = query.list();
 		int size = list.size();
 		if(size == 1){
@@ -83,7 +84,7 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 	}
 
 	public void setName(String name) {
-		
+		this.name = name;
 	}
 
 	public boolean isNameExist() {
@@ -99,12 +100,11 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 	}
 
 	public void setType(String type) {
-		// TODO Auto-generated method stub
-		
+		this.type = type;
+		this.cache.setType(type);
 	}
 
 	public void setTypeName() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -245,6 +245,10 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 	public void getImportingEntities() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public MetaDataEntity getModifyCache() {
+		return this.cache;
 	}
 
 }

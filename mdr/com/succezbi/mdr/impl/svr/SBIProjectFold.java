@@ -8,8 +8,8 @@ import org.hibernate.criterion.DetachedCriteria;
 import com.succezbi.mdr.impl.core.Namespace;
 import com.succezbi.mdr.impl.metamodel.MetaExtent;
 
-@Entity(name="ProjectFold")
-@Table(name="ProjectFold")
+@Entity(name="SBIProjectFold")
+@Table(name="SBIProjectFold")
 public class SBIProjectFold extends Namespace{
 
 	protected SBIProjectFold(MetaExtent extent, SBIProject parent, String name) {

@@ -6,26 +6,22 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.succezbi.mdr.impl.core.MetaObject;
+
 @Entity
 @Table(name = "MDR_METAPACKAGE")
-public abstract class MetaPackage {
-
-	private MetaExtent extent = null;
+public abstract class MetaPackage extends MetaObject{
 
 	@OneToMany(mappedBy = "pkg")
 	private List<MetaClass> classes = null;
 
 	protected MetaPackage(MetaExtent extent) {
-		this.extent = extent;
-	}
-
-	public MetaExtent getExtent() {
-		return this.extent;
+		super(extent);
 	}
 
 	public MetaClass getMetaClass(String type){
 		if("metamodel.MetaClass".equals(type)){
-			return new MetaClass();
+			return new MetaClass(this.getExtent());
 		}
 		return null;
 	}

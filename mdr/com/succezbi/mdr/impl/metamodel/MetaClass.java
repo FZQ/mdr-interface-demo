@@ -7,9 +7,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity
+import org.hibernate.criterion.DetachedCriteria;
+
+import com.succezbi.mdr.impl.core.MetaObject;
+
+@Entity(name="MetaClass")
 @Table(name = "MDR_METACLASS")
-public class MetaClass {
+public class MetaClass extends MetaObject{
+
+	public MetaClass(MetaExtent extent) {
+		super(extent);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Id
 	@Column(name = "NAME")
@@ -33,6 +42,26 @@ public class MetaClass {
 
 	public MetaPackage getPkg() {
 		return pkg;
+	}
+
+	public void setSuperClass(String classname) {
+		
+	}
+
+	public void setJavaClass(String path) {
+		
+	}
+
+	@Override
+	protected String getEntityName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected DetachedCriteria createDetachedCriteria() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

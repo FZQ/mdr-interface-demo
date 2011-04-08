@@ -1,6 +1,8 @@
 package com.succezbi.mdr.api.impl;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -30,9 +32,47 @@ import com.succezbi.mdr.impl.metamodel.MetaPackage;
 public class MetaDataEngineImpl implements MetaDataEngine {
 
 	private MetaExtent extent = null;
+	
+	private String name = null;
+	
+	private String id = null;
+	
+	private Map<String, Object> properties = new HashMap<String, Object>();
 
 	public MetaDataEngineImpl() {
 		extent = new MetaExtent();
+		
+		InputStream mis = MetaClass.class.getResourceAsStream("metamodel.xml");
+		try {
+			this.register(mis);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				mis.close();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		InputStream cis = MetaObject.class.getResourceAsStream("metamodel-core.xml");
+		try {
+			this.register(cis);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				cis.close();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void register(String xml) throws Exception {
@@ -42,28 +82,95 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 	}
 
 	public void register(InputStream is) throws Exception {
-		SAXReader read = new SAXReader();
-		Document doc = read.read(is);
+		SAXReader reader = new SAXReader();
+		Document doc = reader.read(is);
 		this.register(doc);
 	}
 
 	public void register(Document doc) {
 		Element root = doc.getRootElement();
-		if (!"model".equals(root.getName())) {
-			throw new RuntimeException("模型文件根节点应该为model，而传入的模型文件根节点为" + root.getName());
+		if (!"XMI".equalsIgnoreCase(root.getName())) {
+			throw new RuntimeException("模型文件根节点应该为xmi，而传入的模型文件根节点为" + root.getName());
 		}
 		Iterator it = root.elementIterator();
 		while (it.hasNext()) {
 			Element ele = (Element) it.next();
 			String name = ele.getName();
-			if ("hibernate-xml".equals(name)) {
-				System.out.println();
+			if ("XMI.header".equalsIgnoreCase(name)) {
+				this.parseXmiHeader(ele);
+			}
+			if ("XMI.extensions".equals(name)) {
+				this.parseXmiExtensions(ele);
+			}
+			if ("XMI.content".equalsIgnoreCase(name)) {
+				this.parseXmiContent(ele);
 			}
 		}
 	}
 
+	private void parseXmiExtensions(Element ele) {
+		Iterator ei = ele.elementIterator();
+		while (ei.hasNext()) {
+			Element child = (Element) ei.next();
+		}
+	}
+
+	private void parseXmiHeader(Element ele) {
+
+	}
+
+	private void parseXmiContent(Element ele) {
+		Iterator ei = ele.elementIterator();
+		while (ei.hasNext()) {
+			Element child = (Element) ei.next();
+			String childname = child.getName();
+			String prefix = child.getNamespacePrefix();
+			if ("SBI".equalsIgnoreCase(prefix) && "model".equalsIgnoreCase(childname)) {
+				this.parseSBIModel(child);
+			}
+		}
+	}
+
+	private void parseSBIModel(Element ele) {
+		String modelname = ele.attributeValue("name");
+		Iterator ei = ele.elementIterator();
+		while (ei.hasNext()) {
+			Element child = (Element) ei.next();
+			String prefix = child.getNamespacePrefix();
+			String childname = child.getName();
+			if ("SBI".equalsIgnoreCase(prefix) && "class".equalsIgnoreCase(childname)) {
+				this.parseSBIClass(child);
+			}
+		}
+		this.extent.rebuild();
+	}
+
+	private void parseSBIClass(Element ele) {
+		MetaClass metaclass = new MetaClass(this.extent);
+		Iterator ei = ele.elementIterator();
+		String classname = ele.attributeValue("name");
+		metaclass.setName(classname);
+		while (ei.hasNext()) {
+			Element child = (Element) ei.next();
+			String childname = child.getName();
+		}
+		Element classpath = ele.element("classpath");
+		if (classpath != null) {
+			System.out.println(classpath.getText());
+			String path = classpath.getText();
+			metaclass.setJavaClass(path);
+			this.extent.addMetaClass(path);
+		}
+		Element superclass = ele.element("superclass");
+		if (superclass != null) {
+			String superclassname = superclass.getText();
+			metaclass.setSuperClass(superclassname);
+		}
+	}
+
 	public MetaDataEntity createNewEntity(String type, String name) {
-		MetaDataEntityImpl entity = new MetaDataEntityImpl(this.extent, type);
+		MetaDataEntityImpl entity = new MetaDataEntityImpl(this.extent);
+		entity.setType(type);
 		entity.setName(name);
 		return entity;
 	}
@@ -88,8 +195,9 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 			else if (size == 1) {
 				String id = (String) value.get(0);
 				Object obj = value.get(0);
-				MetaDataEntityImpl entity = new MetaDataEntityImpl(this.extent, type);
-				entity.setID(id);
+				MetaDataEntityImpl entity = new MetaDataEntityImpl(this.extent);
+				entity.setType(type);
+				entity.setId(id);
 				return entity;
 			}
 			else {
@@ -133,9 +241,10 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 			}
 			MetaDataEntity[] result = new MetaDataEntity[size];
 			for (int i = 0; i < size; i++) {
-				MetaDataEntityImpl entity = new MetaDataEntityImpl(this.extent, type);
+				MetaDataEntityImpl entity = new MetaDataEntityImpl(this.extent);
+				entity.setType(type);
 				String id = (String) value.get(0);
-				entity.setID(id);
+				entity.setId(id);
 				result[i] = entity;
 			}
 			return result;
@@ -148,21 +257,22 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 	public int getEntityCountByType(String type) {
 		Session session = extent.getSession();
 		try {
-			String hql = "select count(id) from :type";
+			String hql = "from " + type;
 			Query query = session.createQuery(hql);
-			query.setString(0, type);
-			int count = query.executeUpdate();
-			return count;
+			//query.setString(0, type);
+			List list = query.list();
+			return list.size();
 		}
 		finally {
 			session.close();
 		}
 	}
 
-	public String save(MetaDataEntity entity) {
-		String type = entity.getType();
-		String name = entity.getName();
-		String parentid = entity.getParentID();
+	public String save(MetaDataEntity entity) throws IOException {
+		MetaDataEntity cache = entity.getModifyCache();
+		String type = cache.getType();
+		String name = cache.getName();
+		String parentid = cache.getParentID();
 		Session session = this.extent.getSession();
 		Transaction tx = session.beginTransaction();
 		try {
@@ -171,7 +281,7 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 			MetaFactory factory = pkg.getFactory();
 			MetaObject obj = factory.create(cls, name, parentid);
 			session.save(obj);
-			Map<String, Object> property = entity.getProperties();
+			Map<String, Object> property = cache.getProperties();
 			Set<String> keys = property.keySet();
 			Iterator<String> it = keys.iterator();
 			while (it.hasNext()) {

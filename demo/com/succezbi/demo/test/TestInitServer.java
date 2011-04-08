@@ -1,11 +1,13 @@
 package com.succezbi.demo.test;
 
+import java.io.InputStream;
+
 import junit.framework.TestCase;
-import server.ServerRegister;
 
 import com.succezbi.mdr.api.MDRApiFactory;
 import com.succezbi.mdr.api.MetaDataEngine;
 import com.succezbi.mdr.api.MetaDataEntity;
+import com.succezbi.mdr.impl.svr.SBIServer;
 
 public class TestInitServer extends TestCase {
 
@@ -16,8 +18,13 @@ public class TestInitServer extends TestCase {
 	 * @throws Exception 
 	 */
 	public void testInitServer() throws Exception {
-		ServerRegister sr = new ServerRegister();
-		sr.register();
+		InputStream is = SBIServer.class.getResourceAsStream("metamodel-server.xml");
+		try {
+			engine.register(is);
+		}
+		finally {
+			is.close();
+		}
 		int count = engine.getEntityCountByType("SBIServer");
 		String id = null;
 		if (count == 0) {

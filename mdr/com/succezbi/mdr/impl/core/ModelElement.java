@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -43,9 +42,6 @@ public abstract class ModelElement extends MetaObject {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="parentid")
 	private ModelElement parent = null;
-	
-	@MapKey(name="properties")
-	private Map properties = null;
 
 	public void setName(String name) {
 		this.name = name;
@@ -53,14 +49,6 @@ public abstract class ModelElement extends MetaObject {
 
 	public String getName() {
 		return name;
-	}
-
-	public void setProperties(Map properties) {
-		this.properties = properties;
-	}
-
-	public Map getProperties() {
-		return properties;
 	}
 
 	public void setParent(ModelElement parent) {

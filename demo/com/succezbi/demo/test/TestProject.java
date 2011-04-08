@@ -15,7 +15,7 @@ public class TestProject extends TestCase{
 		
 	}
 	
-	public void testCreateProject(){
+	public void testCreateProject() throws Exception{
 		MetaDataEntity project = engine.createNewEntity(null, "Server.Project", "project1");
 		project.setProperty("version", "0.0.1");
 		project.setProperty("DBConnPool", "3c7030f0536611e085dbf04da27e580f");

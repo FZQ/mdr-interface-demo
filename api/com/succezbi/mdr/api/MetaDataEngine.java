@@ -24,5 +24,5 @@ public interface MetaDataEngine {
 	
 	public int getEntityCountByType(String type);
 
-	public String save(MetaDataEntity server);
+	public String save(MetaDataEntity server) throws Exception;
 }

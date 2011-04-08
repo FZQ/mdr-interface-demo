@@ -120,4 +120,11 @@ public interface MetaDataEntity {
 	 * 获取本MetaDataEntity被其他MetaDataEntity引用的记录
 	 */
 	public void getImportingEntities();
+
+	/**
+	 * 获取MetaDataEntity中的写入缓存，在将MetaDataEntity执行save到数据库前，对
+	 * MetaDataEntity的所有修改都将会写入到一个缓存的MetaDataEntity实现中
+	 * @return
+	 */
+	public MetaDataEntity getModifyCache();
 }
