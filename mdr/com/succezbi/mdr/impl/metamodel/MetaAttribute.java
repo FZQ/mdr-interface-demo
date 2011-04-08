@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 
 import org.hibernate.criterion.DetachedCriteria;
 
-import com.succezbi.mdr.impl.core.MetaObject;
 
 @Entity(name="MetaAttribute")
 public class MetaAttribute extends MetaObject{

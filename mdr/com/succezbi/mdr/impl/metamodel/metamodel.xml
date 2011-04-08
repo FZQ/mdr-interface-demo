@@ -10,20 +10,30 @@
 	</XMI.header>
 	<XMI.content>
 		<SBI:Model>
+			<SBI:class name="MetaObject">
+				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaObject</SBI:classpath>
+				<SBI:table>MDR_METAOBJECT</SBI:table>
+			</SBI:class>
+			<SBI:class name="DataSlot">
+				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaDataSlot</SBI:classpath>
+				<SBI:table>MDR_METADATASLOT</SBI:table>
+			</SBI:class>
 			<SBI:class name="MetaAssociation">
 				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaAssociation</SBI:classpath>
 				<SBI:table>MDR_METAASSOCIATION</SBI:table>
 			</SBI:class>
 			<SBI:class name="MetaClass">
-				<SBI:classpath>succezbi.mdr.impl.metamodel.MetaClass</SBI:classpath>
+				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaClass</SBI:classpath>
 				<SBI:table>MDR_METACLASS</SBI:table>
 			</SBI:class>
+			<!--
 			<SBI:class name="MetaExtent">
-				<SBI:classpath>succezbi.mdr.impl.metamodel.MetaExtent</SBI:classpath>
+				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaExtent</SBI:classpath>
 				<SBI:table>MDR_METAEXTENT</SBI:table>
 			</SBI:class>
+			-->
 			<SBI:class name="MetaPackage">
-				<SBI:classpath>succezbi.mdr.impl.metamodel.MetaPackage</SBI:classpath>
+				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaPackage</SBI:classpath>
 				<SBI:table>MDR_METAPACKAGE</SBI:table>
 			</SBI:class>
 		</SBI:Model>

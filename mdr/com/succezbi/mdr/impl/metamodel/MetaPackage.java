@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.succezbi.mdr.impl.core.MetaObject;
 
 @Entity
 @Table(name = "MDR_METAPACKAGE")

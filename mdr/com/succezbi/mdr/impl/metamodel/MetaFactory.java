@@ -1,6 +1,5 @@
 package com.succezbi.mdr.impl.metamodel;
 
-import com.succezbi.mdr.impl.core.MetaObject;
 
 public abstract class MetaFactory {
 	

@@ -1,4 +1,4 @@
-package com.succezbi.mdr.impl.core;
+package com.succezbi.mdr.impl.metamodel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,6 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.criterion.DetachedCriteria;
 
-import com.succezbi.mdr.impl.metamodel.MetaExtent;
 
 @Entity(name = "MetaObject")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -41,7 +40,7 @@ public abstract class MetaObject {
 	
 	@OneToMany(mappedBy="object")
 	@MapKey(name="key")
-	private Map<String, DataSlot> properties = new HashMap<String, DataSlot>();
+	private Map<String, MetaDataSlot> properties = new HashMap<String, MetaDataSlot>();
 	
 	public void setId(String id) {
 		this.id = id;
@@ -59,11 +58,11 @@ public abstract class MetaObject {
 	 */
 	protected abstract DetachedCriteria createDetachedCriteria();
 
-	public void setProperties(Map<String, DataSlot> properties) {
+	public void setProperties(Map<String, MetaDataSlot> properties) {
 		this.properties = properties;
 	}
 
-	public Map<String, DataSlot> getProperties() {
+	public Map<String, MetaDataSlot> getProperties() {
 		return properties;
 	}
 

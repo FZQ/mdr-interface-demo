@@ -17,11 +17,12 @@ import org.hibernate.Transaction;
 
 import com.succezbi.mdr.api.MetaDataEngine;
 import com.succezbi.mdr.api.MetaDataEntity;
-import com.succezbi.mdr.impl.core.DataSlot;
-import com.succezbi.mdr.impl.core.MetaObject;
+import com.succezbi.mdr.impl.core.ModelElement;
+import com.succezbi.mdr.impl.metamodel.MetaDataSlot;
 import com.succezbi.mdr.impl.metamodel.MetaClass;
 import com.succezbi.mdr.impl.metamodel.MetaExtent;
 import com.succezbi.mdr.impl.metamodel.MetaFactory;
+import com.succezbi.mdr.impl.metamodel.MetaObject;
 import com.succezbi.mdr.impl.metamodel.MetaPackage;
 
 /**
@@ -58,7 +59,7 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 			}
 		}
 		
-		InputStream cis = MetaObject.class.getResourceAsStream("metamodel-core.xml");
+		InputStream cis = ModelElement.class.getResourceAsStream("metamodel-core.xml");
 		try {
 			this.register(cis);
 		}
@@ -287,7 +288,7 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 			while (it.hasNext()) {
 				String key = it.next();
 				Object value = property.get(key);
-				DataSlot slot = new DataSlot();
+				MetaDataSlot slot = new MetaDataSlot();
 				slot.setKey(key);
 				slot.setValue(value);
 				slot.setObject(obj);

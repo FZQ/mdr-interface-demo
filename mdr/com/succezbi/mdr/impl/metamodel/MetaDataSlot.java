@@ -1,4 +1,4 @@
-package com.succezbi.mdr.impl.core;
+package com.succezbi.mdr.impl.metamodel;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,9 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
 @Entity(name="DataSlot")
 @Table(name = "MDR_DATASLOT")
-public class DataSlot implements Serializable {
+public class MetaDataSlot implements Serializable {
 
 	private static final long serialVersionUID = -5796813691873046476L;
 

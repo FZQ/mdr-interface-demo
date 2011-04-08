@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.succezbi.mdr.impl.metamodel.MetaExtent;
+import com.succezbi.mdr.impl.metamodel.MetaObject;
 
 /**
  * ModelElement，ModelElement可以与其他ModelElement组成树，ModelElement组成树的方式

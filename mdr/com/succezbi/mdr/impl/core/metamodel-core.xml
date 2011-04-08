@@ -14,17 +14,9 @@
 				<SBI:classpath>com.succezbi.mdr.impl.core.Classifier</SBI:classpath>
 				<SBI:table>MDR_CLASSIFIER</SBI:table>
 			</SBI:class>
-			<SBI:class name="DataSlot">
-				<SBI:classpath>com.succezbi.mdr.impl.core.DataSlot</SBI:classpath>
-				<SBI:table>MDR_DATASLOT</SBI:table>
-			</SBI:class>
 			<SBI:class name="Feature">
 				<SBI:classpath>com.succezbi.mdr.impl.core.Feature</SBI:classpath>
 				<SBI:table>MDR_FEATURE</SBI:table>
-			</SBI:class>
-			<SBI:class name="MetaObject">
-				<SBI:classpath>com.succezbi.mdr.impl.core.MetaObject</SBI:classpath>
-				<SBI:table>MDR_METAOBJECT</SBI:table>
 			</SBI:class>
 			<SBI:class name="ModelElement">
 				<SBI:classpath>com.succezbi.mdr.impl.core.ModelElement</SBI:classpath>
