@@ -9,7 +9,7 @@
 		<XMI.metamodel xmi.version="1.3" href="SBI.xml" xmi.name="SBI"/>
 	</XMI.header>
 	<XMI.content>
-		<SBI:Model>
+		<SBI:Model name="com.succezbi.model.core">
 			<SBI:class name="Classifier">
 				<SBI:classpath>com.succezbi.mdr.impl.core.Classifier</SBI:classpath>
 				<SBI:table>MDR_CLASSIFIER</SBI:table>

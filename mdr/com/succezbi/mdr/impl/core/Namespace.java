@@ -9,8 +9,6 @@ import javax.persistence.Transient;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import com.succezbi.mdr.impl.metamodel.MetaExtent;
-
 @Entity(name="Namespace")
 public abstract class Namespace extends ModelElement {
 
@@ -22,11 +20,6 @@ public abstract class Namespace extends ModelElement {
 
 	@Transient
 	private String entityname = null;
-
-	protected Namespace(MetaExtent extent, Namespace parent, String name) {
-		super(extent, parent, name);
-		this.entityname = this.getEntityName();
-	}
 
 	public Namespace getParent() {
 		//查询LET<this.left,RGT>this.RGT，则得到全部的父节点，其中RGT最小的是直接父节点

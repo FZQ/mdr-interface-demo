@@ -9,7 +9,7 @@
 		<XMI.metamodel xmi.version="1.3" href="SBI.xml" xmi.name="SBI"/>
 	</XMI.header>
 	<XMI.content>
-		<SBI:Model>
+		<SBI:Model name="com.succezbi.model.svr">
 			<SBI:class name="SBIServer">
 				<SBI:classpath>com.succezbi.mdr.impl.svr.SBIServer</SBI:classpath>
 				<SBI:table>MDR_SBISERVER</SBI:table>

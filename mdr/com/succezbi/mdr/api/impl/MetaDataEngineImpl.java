@@ -2,6 +2,7 @@ package com.succezbi.mdr.api.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -18,8 +19,8 @@ import org.hibernate.Transaction;
 import com.succezbi.mdr.api.MetaDataEngine;
 import com.succezbi.mdr.api.MetaDataEntity;
 import com.succezbi.mdr.impl.core.ModelElement;
-import com.succezbi.mdr.impl.metamodel.MetaDataSlot;
 import com.succezbi.mdr.impl.metamodel.MetaClass;
+import com.succezbi.mdr.impl.metamodel.MetaDataSlot;
 import com.succezbi.mdr.impl.metamodel.MetaExtent;
 import com.succezbi.mdr.impl.metamodel.MetaFactory;
 import com.succezbi.mdr.impl.metamodel.MetaObject;
@@ -33,16 +34,15 @@ import com.succezbi.mdr.impl.metamodel.MetaPackage;
 public class MetaDataEngineImpl implements MetaDataEngine {
 
 	private MetaExtent extent = null;
-	
+
 	private String name = null;
-	
+
 	private String id = null;
-	
+
 	private Map<String, Object> properties = new HashMap<String, Object>();
 
 	public MetaDataEngineImpl() {
 		extent = new MetaExtent();
-		
 		InputStream mis = MetaClass.class.getResourceAsStream("metamodel.xml");
 		try {
 			this.register(mis);
@@ -58,7 +58,6 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 				e.printStackTrace();
 			}
 		}
-		
 		InputStream cis = ModelElement.class.getResourceAsStream("metamodel-core.xml");
 		try {
 			this.register(cis);
@@ -79,16 +78,17 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 	public void register(String xml) throws Exception {
 		SAXReader reader = new SAXReader();
 		Document doc = reader.read(xml);
-		this.register(doc);
+		this.regist(doc);
 	}
 
 	public void register(InputStream is) throws Exception {
 		SAXReader reader = new SAXReader();
 		Document doc = reader.read(is);
-		this.register(doc);
+		this.regist(doc);
 	}
 
-	public void register(Document doc) {
+	private void regist(Document doc) {
+		//分析过程中缓存涉及的metaclass，最终映射好后再将之转入存储
 		Element root = doc.getRootElement();
 		if (!"XMI".equalsIgnoreCase(root.getName())) {
 			throw new RuntimeException("模型文件根节点应该为xmi，而传入的模型文件根节点为" + root.getName());
@@ -100,11 +100,48 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 			if ("XMI.header".equalsIgnoreCase(name)) {
 				this.parseXmiHeader(ele);
 			}
-			if ("XMI.extensions".equals(name)) {
+			if ("XMI.extensions".equalsIgnoreCase(name)) {
 				this.parseXmiExtensions(ele);
 			}
 			if ("XMI.content".equalsIgnoreCase(name)) {
 				this.parseXmiContent(ele);
+			}
+		}
+	}
+
+	/**
+	 * 注册分析xml过程中记录下的MetaClass列表
+	 * @param metaclasses
+	 */
+	private void registMetaClasses(ArrayList<MetaClass> metaclasses) {
+		for (int i = 0; i < metaclasses.size(); i++) {
+			MetaClass metaclass = metaclasses.get(i);
+			this.registMetaClass(metaclass);
+		}
+	}
+
+	/**
+	 * 注册MetaClass到数据库表MDR_METACLASS中，将之放置到数据库中，是为了方便通过数
+	 * 据库直接查询某个类型的所有元数据实例等
+	 * @param metaclass
+	 */
+	private void registMetaClass(MetaClass metaclass) {
+		Session session = this.extent.getSession();
+		Query query = session.createQuery("from MetaClass where name=:name");
+		query.setString("name", metaclass.getName());
+		List value = query.list();
+		if (value.size() == 0) {
+			Transaction tx = session.beginTransaction();
+			try {
+				session.save(metaclass);
+				tx.commit();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				tx.rollback();
+			}
+			finally {
+				session.close();
 			}
 		}
 	}
@@ -134,39 +171,66 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 
 	private void parseSBIModel(Element ele) {
 		String modelname = ele.attributeValue("name");
+		MetaPackage pkg = new MetaPackage();
+		pkg.setExtent(this.extent);
+		pkg.setName(modelname);
+
+		ArrayList<MetaClass> metaclasses = new ArrayList<MetaClass>();
 		Iterator ei = ele.elementIterator();
 		while (ei.hasNext()) {
 			Element child = (Element) ei.next();
 			String prefix = child.getNamespacePrefix();
 			String childname = child.getName();
 			if ("SBI".equalsIgnoreCase(prefix) && "class".equalsIgnoreCase(childname)) {
-				this.parseSBIClass(child);
+				this.parseSBIClass(child, pkg, metaclasses);
 			}
 		}
 		this.extent.rebuild();
+		pkg.setClasses(metaclasses);
+		this.registMetaPackage(pkg);
+		this.registMetaClasses(metaclasses);
+
 	}
 
-	private void parseSBIClass(Element ele) {
-		MetaClass metaclass = new MetaClass(this.extent);
-		Iterator ei = ele.elementIterator();
+	private void registMetaPackage(MetaPackage pkg) {
+		Session session = this.extent.getSession();
+		Query query = session.createQuery("from MetaPackage where name=:name");
+		query.setString("name", pkg.getName());
+		List value = query.list();
+		if (value.size() == 0) {
+			Transaction tx = session.beginTransaction();
+			try {
+				session.save(pkg);
+				tx.commit();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				tx.rollback();
+			}
+			finally {
+				session.close();
+			}
+		}
+	}
+
+	private void parseSBIClass(Element ele, MetaPackage pkg, ArrayList<MetaClass> metaclasses) {
+		MetaClass metaclass = new MetaClass();
 		String classname = ele.attributeValue("name");
 		metaclass.setName(classname);
-		while (ei.hasNext()) {
-			Element child = (Element) ei.next();
-			String childname = child.getName();
-		}
 		Element classpath = ele.element("classpath");
 		if (classpath != null) {
 			System.out.println(classpath.getText());
 			String path = classpath.getText();
-			metaclass.setJavaClass(path);
+			metaclass.setClasspath(path);
 			this.extent.addMetaClass(path);
 		}
 		Element superclass = ele.element("superclass");
 		if (superclass != null) {
 			String superclassname = superclass.getText();
-			metaclass.setSuperClass(superclassname);
+			metaclass.setSuperclass(superclassname);
 		}
+		metaclass.setPkg(pkg);
+		metaclasses.add(metaclass);
 	}
 
 	public MetaDataEntity createNewEntity(String type, String name) {
@@ -177,7 +241,9 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 	}
 
 	public MetaDataEntity get(String id) {
-		return null;
+		MetaDataEntityImpl result = new MetaDataEntityImpl(this.extent);
+		result.setId(id);
+		return result;
 	}
 
 	public MetaDataEntity get(MetaDataEntity parent, String type, String name) {
@@ -232,9 +298,8 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 	public MetaDataEntity[] getEntityByType(String type) {
 		Session session = extent.getSession();
 		try {
-			String hql = "select id from :type";
+			String hql = "select id from " + type;
 			Query query = session.createQuery(hql);
-			query.setString(0, type);
 			List value = query.list();
 			int size = value.size();
 			if (size == 0) {
@@ -283,16 +348,18 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 			MetaObject obj = factory.create(cls, name, parentid);
 			session.save(obj);
 			Map<String, Object> property = cache.getProperties();
-			Set<String> keys = property.keySet();
-			Iterator<String> it = keys.iterator();
-			while (it.hasNext()) {
-				String key = it.next();
-				Object value = property.get(key);
-				MetaDataSlot slot = new MetaDataSlot();
-				slot.setKey(key);
-				slot.setValue(value);
-				slot.setObject(obj);
-				session.saveOrUpdate(slot);
+			if (property != null) {
+				Set<String> keys = property.keySet();
+				Iterator<String> it = keys.iterator();
+				while (it.hasNext()) {
+					String key = it.next();
+					Object value = property.get(key);
+					MetaDataSlot slot = new MetaDataSlot();
+					slot.setKey(key);
+					slot.setValue(value);
+					slot.setObject(obj);
+					session.saveOrUpdate(slot);
+				}
 			}
 			tx.commit();
 		}

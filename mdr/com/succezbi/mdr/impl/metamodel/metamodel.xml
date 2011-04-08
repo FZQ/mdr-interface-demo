@@ -9,7 +9,7 @@
 		<XMI.metamodel xmi.version="1.3" href="SBI.xml" xmi.name="SBI"/>
 	</XMI.header>
 	<XMI.content>
-		<SBI:Model>
+		<SBI:Model name="com.succezbi.metamodel">
 			<SBI:class name="MetaObject">
 				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaObject</SBI:classpath>
 				<SBI:table>MDR_METAOBJECT</SBI:table>

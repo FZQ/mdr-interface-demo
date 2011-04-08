@@ -1,17 +1,14 @@
 package com.succezbi.mdr.impl.metamodel;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.hibernate.criterion.DetachedCriteria;
 
 
 @Entity(name="MetaAssociation")
+@Table(name="MDR_METAASSOCIATION")
 public class MetaAssociation extends MetaObject{
-
-	public MetaAssociation(MetaExtent extent) {
-		super(extent);
-		// TODO Auto-generated constructor stub
-	}
 
 	@Override
 	protected String getEntityName() {

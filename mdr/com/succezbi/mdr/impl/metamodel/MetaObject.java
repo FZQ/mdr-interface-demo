@@ -24,10 +24,6 @@ public abstract class MetaObject {
 	@Transient
 	private MetaExtent extent = null;
 	
-	public MetaObject(MetaExtent extent) {
-		this.extent = extent;
-	}
-	
 	public MetaExtent getExtent(){
 		return this.extent;
 	}
@@ -64,6 +60,10 @@ public abstract class MetaObject {
 
 	public Map<String, MetaDataSlot> getProperties() {
 		return properties;
+	}
+
+	public void setExtent(MetaExtent extent) {
+		this.extent = extent;
 	}
 
 }

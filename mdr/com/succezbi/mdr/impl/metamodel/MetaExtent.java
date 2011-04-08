@@ -1,5 +1,6 @@
 package com.succezbi.mdr.impl.metamodel;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 @Entity(name="MetaExtent")
-public class MetaExtent {
+public class MetaExtent implements Serializable{
 
 	private static final Logger log = Logger.getLogger(MetaExtent.class);
 

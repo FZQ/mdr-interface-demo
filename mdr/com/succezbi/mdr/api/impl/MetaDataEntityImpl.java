@@ -84,6 +84,7 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 	}
 
 	public void setName(String name) {
+		this.cache.setName(name);
 		this.name = name;
 	}
 

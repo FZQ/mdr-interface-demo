@@ -15,8 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
-@Entity(name="DataSlot")
-@Table(name = "MDR_DATASLOT")
+@Entity(name="MetaDataSlot")
+@Table(name = "MDR_METADATASLOT")
 public class MetaDataSlot implements Serializable {
 
 	private static final long serialVersionUID = -5796813691873046476L;
