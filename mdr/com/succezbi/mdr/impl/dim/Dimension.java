@@ -7,16 +7,10 @@ import javax.persistence.ManyToOne;
 import org.hibernate.criterion.DetachedCriteria;
 
 import com.succezbi.mdr.impl.core.Feature;
-import com.succezbi.mdr.impl.core.ModelElement;
-import com.succezbi.mdr.impl.metamodel.MetaExtent;
 import com.succezbi.mdr.impl.svr.SBIProject;
 
 @Entity(name="Dimension")
 public class Dimension extends Feature{
-	
-	public Dimension(MetaExtent extent, ModelElement parent, String name) {
-		super(extent, parent, name);
-	}
 
 	@ManyToOne
 	@JoinColumn(name="ProjectID")

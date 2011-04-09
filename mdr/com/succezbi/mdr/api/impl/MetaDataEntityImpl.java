@@ -93,7 +93,7 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 	}
 
 	public void setParentID(String id) {
-		
+		this.cache.setParentID(id);
 	}
 
 	public void setParent(MetaDataEntity parent) {

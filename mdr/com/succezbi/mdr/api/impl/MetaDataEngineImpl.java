@@ -341,12 +341,13 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 		String parentid = cache.getParentID();
 		Session session = this.extent.getSession();
 		Transaction tx = session.beginTransaction();
+		String objectid = null;
 		try {
 			MetaClass cls = this.findMetaClass(session, type);
 			MetaPackage pkg = cls.getPkg();
 			MetaFactory factory = pkg.getFactory();
 			MetaObject obj = factory.create(cls, name, parentid);
-			session.save(obj);
+			objectid = (String) session.save(obj);
 			Map<String, Object> property = cache.getProperties();
 			if (property != null) {
 				Set<String> keys = property.keySet();
@@ -366,7 +367,7 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 		finally {
 			session.close();
 		}
-		return null;
+		return objectid;
 	}
 
 	private MetaClass findMetaClass(Session session, String type) {

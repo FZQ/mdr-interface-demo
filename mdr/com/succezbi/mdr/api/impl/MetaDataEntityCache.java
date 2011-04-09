@@ -7,14 +7,19 @@ import java.util.Map;
 
 import com.succezbi.mdr.api.MetaDataEntity;
 
-public class MetaDataEntityCache implements MetaDataEntity{
+public class MetaDataEntityCache implements MetaDataEntity {
 	private String id = null;
+
 	private boolean consist = false;
+
 	private String name = null;
+
 	private Map<String, Object> properties = null;
+
 	private String parentid = null;
+
 	private String type;
-	
+
 	public String getID() {
 		return this.id;
 	}
@@ -36,7 +41,7 @@ public class MetaDataEntityCache implements MetaDataEntity{
 	}
 
 	public String getParentID() {
-		return this.parentid ;
+		return this.parentid;
 	}
 
 	public void setParentID(String id) {
@@ -64,7 +69,7 @@ public class MetaDataEntityCache implements MetaDataEntity{
 	}
 
 	public void setTypeName() {
-		
+
 	}
 
 	public String[] getChilds() {
@@ -93,12 +98,12 @@ public class MetaDataEntityCache implements MetaDataEntity{
 
 	public void addChild(MetaDataEntity child) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void bindChild(String childid) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public InputStream getContent() {
@@ -108,12 +113,12 @@ public class MetaDataEntityCache implements MetaDataEntity{
 
 	public void setContent(InputStream is) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void writeContent(OutputStream os) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public Map<String, Object> getProperties() {
@@ -121,65 +126,35 @@ public class MetaDataEntityCache implements MetaDataEntity{
 	}
 
 	public Object getProperty(String key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public int getIntProperty(String key, int dfvalue) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public int getIntProperty(String key) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public void setIntProperty(String key, int value) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public boolean getBoolProperty(String key, boolean dfvalue) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean getBoolProperty(String key) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public void setBoolProperty(String key, boolean value) {
-		
+		return this.properties.get(key);
 	}
 
 	public String getStringProperty(String key, String dfvalue) {
-		return null;
+		return this.properties.containsKey(key) ? this.getStringProperty(key) : dfvalue;
 	}
 
 	public String getStringProperty(String key) {
-		return null;
+		return (String) this.properties.get(key);
 	}
 
 	public void setStringProperty(String key, String value) {
-		
+		this.properties.put(key, value);
 	}
 
 	public void removeProperty(String key) {
-		
+		this.properties.remove(key);
 	}
 
 	public boolean hasProperty(String key) {
-		return false;
+		return this.properties.containsKey(key);
 	}
 
 	public void setProperty(String key, Object value) {
-		
+		this.properties.put(key, value);
 	}
 
 	public void getImportedEntities() {
-		
+
 	}
 
 	public String getAliasNameById(String id) {
@@ -195,7 +170,7 @@ public class MetaDataEntityCache implements MetaDataEntity{
 	}
 
 	public void getImportingEntities() {
-		
+
 	}
 
 	public MetaDataEntity getModifyCache() {
@@ -204,6 +179,30 @@ public class MetaDataEntityCache implements MetaDataEntity{
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public int getIntProperty(String key, int dfvalue) {
+		return this.properties.containsKey(key)?this.getIntProperty(key):dfvalue;
+	}
+
+	public int getIntProperty(String key) {
+		return (Integer) this.properties.get(key);
+	}
+
+	public void setIntProperty(String key, int value) {
+		this.properties.put(key, value);
+	}
+
+	public boolean getBoolProperty(String key, boolean dfvalue) {
+		return this.properties.containsKey(key)?this.getBoolProperty(key):dfvalue;
+	}
+
+	public boolean getBoolProperty(String key) {
+		return (Boolean) this.properties.get(key);
+	}
+
+	public void setBoolProperty(String key, boolean value) {
+		this.properties.put(key, value);
 	}
 
 }
