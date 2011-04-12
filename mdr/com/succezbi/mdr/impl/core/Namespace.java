@@ -16,10 +16,10 @@ import org.hibernate.Session;
 @Table(name="CORE_NAMESPACE")
 public abstract class Namespace extends ModelElement {
 
-	@Column(name = "LFT")
+	@Column(name = "LFT", length=24)
 	private int left;
 
-	@Column(name = "RGT")
+	@Column(name = "RGT", length=24)
 	private int right;
 	
 	@ManyToOne
@@ -133,7 +133,6 @@ public abstract class Namespace extends ModelElement {
 
 
 	public int compareTo(Namespace file) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

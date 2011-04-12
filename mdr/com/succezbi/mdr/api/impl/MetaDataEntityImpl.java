@@ -25,6 +25,8 @@ public class MetaDataEntityImpl implements MetaDataEntity {
 
 	private String id = null;
 
+	private String parentid = null;
+
 	private String type = null;
 
 	private String name = null;
@@ -81,7 +83,7 @@ public class MetaDataEntityImpl implements MetaDataEntity {
 			parentid = this.getParentID();
 		}
 		MetaDataEntityImpl entity = new MetaDataEntityImpl(this.extent);
-		entity.setID(id);
+		entity.setID(this.parentid);
 		return entity;
 	}
 
@@ -112,6 +114,7 @@ public class MetaDataEntityImpl implements MetaDataEntity {
 
 	public void setParentID(String id) {
 		this.cache.setParentID(id);
+		this.parentid = id;
 	}
 
 	public void setParent(MetaDataEntity parent) {
