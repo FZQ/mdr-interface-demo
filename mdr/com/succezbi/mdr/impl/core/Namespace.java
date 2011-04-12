@@ -4,12 +4,14 @@ import java.util.Iterator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 @Entity(name="Namespace")
+@Table(name="CORE_NAMESPACE")
 public abstract class Namespace extends ModelElement {
 
 	@Column(name = "LFT")

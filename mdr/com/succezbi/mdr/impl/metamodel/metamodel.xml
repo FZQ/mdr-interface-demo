@@ -10,13 +10,28 @@
 	</XMI.header>
 	<XMI.content>
 		<SBI:Model name="com.succezbi.metamodel">
+			<SBI:DataTypes>
+				<SBI:DataType name="Timestamp" classpath="java.sql.Timestamp"/>
+				<SBI:DataType name="String" classpath="java.lang.String"/>
+				<SBI:DataType name="Map" classpath="java.util.Map"/>
+			</SBI:DataTypes>
 			<SBI:class name="MetaObject">
 				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaObject</SBI:classpath>
 				<SBI:table>MDR_METAOBJECT</SBI:table>
+				<SBI:feature>
+					<SBI:Attribute name="createtime" datatype="java.sql.Timestamp"/>
+					<SBI:Attribute name="modifytime" datatype="java.sql.Timestamp"/>
+					<SBI:Attribute name="id" datatype="java.lang.String"/>
+					<SBI:Attriubte name="properties" datatype="java.util.Map"/>
+				</SBI:feature>
 			</SBI:class>
-			<SBI:class name="DataSlot">
+			<SBI:class name="MetaDataSlot">
 				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaDataSlot</SBI:classpath>
 				<SBI:table>MDR_METADATASLOT</SBI:table>
+				<SBI:feature>
+					<SBI:Attribute name="key" datatype="java.lang.String"/>
+					<SBI:Attribute name="valuebyte" datatype="java.lang.Byte[]"/>
+				</SBI:feature>
 			</SBI:class>
 			<SBI:class name="MetaAssociation">
 				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaAssociation</SBI:classpath>
@@ -25,6 +40,15 @@
 			<SBI:class name="MetaClass">
 				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaClass</SBI:classpath>
 				<SBI:table>MDR_METACLASS</SBI:table>
+				<SBI:feature>
+					<SBI:Attribute name="classpath" datatype="java.lang.String"/>
+					<SBI:Attribute name="name" datatype="java.lang.String"/>
+					<SBI:Attribute name="valuebyte" datatype="java.lang.Byte[]"/>
+					<SBI:Association name="pkg" value="" type=""/>
+					<SBI:Association name="superclass" value="" type=""/>
+					<SBI:Association name="attributes" value="" type=""/>
+					<SBI:Association name="associations" value="" type=""/>
+				</SBI:feature>
 			</SBI:class>
 			<!--
 			<SBI:class name="MetaExtent">
@@ -35,7 +59,34 @@
 			<SBI:class name="MetaPackage">
 				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaPackage</SBI:classpath>
 				<SBI:table>MDR_METAPACKAGE</SBI:table>
+				<SBI:feature>
+					<SBI:Attribute name="name" datatype="java.lang.String"/>
+					<SBI:Association name="pkg" value="" type=""/>
+					<SBI:Association name="classes" value="" type=""/>
+				</SBI:feature>
 			</SBI:class>
+			<SBI:class name="MetaDataType">
+				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaDataType</SBI:classpath>
+				<SBI:table>MDR_METAPACKAGE</SBI:table>
+				<SBI:feature>
+					<SBI:Attribute name="classpath" datatype="java.lang.String"/>
+				</SBI:feature>
+			</SBI:class>
+		 <SBI:class name="MetaAttribute">
+				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaAttribute</SBI:classpath>
+				<SBI:table>MDR_METAATTRIBUTE</SBI:table>
+				<SBI:feature>
+					<SBI:Attribute name="name" datatype="java.lang.String"/>
+					<SBI:Association name="metaclass" value="" type=""/>
+					<SBI:Association name="datatype" value="" type=""/>
+				</SBI:feature>
+			</SBI:class>
+			<!--
+		 <SBI:class name="MetaAttribute.PrimaryKey">
+				<SBI:classpath>com.succezbi.mdr.impl.metamodel.MetaAttribute$PrimaryKey</SBI:classpath>
+				<SBI:table>MDR_METAATTRIBUTE</SBI:table>
+			</SBI:class>
+			-->
 		</SBI:Model>
 	</XMI.content>
 	<XMI.extensions xmi.extender="succezbi">

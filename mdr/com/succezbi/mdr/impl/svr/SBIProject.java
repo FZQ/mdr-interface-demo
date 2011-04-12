@@ -6,7 +6,7 @@ import org.hibernate.criterion.DetachedCriteria;
 
 import com.succezbi.mdr.impl.core.ModelElement;
 
-@Entity(name="SBIProject")
+@Entity(name="SVR_SBIProject")
 public class SBIProject extends ModelElement{
 
 	@Override

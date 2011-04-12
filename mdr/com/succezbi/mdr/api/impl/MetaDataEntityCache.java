@@ -2,19 +2,21 @@ package com.succezbi.mdr.api.impl;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import com.succezbi.mdr.api.MetaDataEntity;
 
 public class MetaDataEntityCache implements MetaDataEntity {
+
 	private String id = null;
 
 	private boolean consist = false;
 
 	private String name = null;
 
-	private Map<String, Object> properties = null;
+	private Map<String, Object> properties = new HashMap<String, Object>();
 
 	private String parentid = null;
 
@@ -22,6 +24,10 @@ public class MetaDataEntityCache implements MetaDataEntity {
 
 	public String getID() {
 		return this.id;
+	}
+	
+	public void setID(String id) {
+		this.id = id;
 	}
 
 	public boolean isConsist() {
@@ -53,6 +59,9 @@ public class MetaDataEntityCache implements MetaDataEntity {
 	}
 
 	public MetaDataEntity getParent() {
+		if(this.parentid == null){
+			return null;
+		}
 		return null;
 	}
 

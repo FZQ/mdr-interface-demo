@@ -3,8 +3,10 @@ package com.succezbi.mdr.impl.core;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity(name="Feature")
+@Table(name="CORE_MODELELEMENT")
 public abstract class Feature extends ModelElement {
 
 	@ManyToOne

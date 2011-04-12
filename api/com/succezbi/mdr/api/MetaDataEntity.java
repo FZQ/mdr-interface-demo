@@ -18,7 +18,8 @@ public interface MetaDataEntity {
 	 * @return
 	 */
 	public String getID();
-	
+	public void setID(String id);
+
 	/**
 	 * 元数据是否与后台数据库记录绑定，也就是是否已经物化
 	 * @return

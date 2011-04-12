@@ -11,30 +11,36 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.succezbi.mdr.api.MetaDataEntity;
+import com.succezbi.mdr.impl.metamodel.MetaDataSlot;
 import com.succezbi.mdr.impl.metamodel.MetaExtent;
+import com.succezbi.mdr.impl.metamodel.MetaObject;
 
-public class MetaDataEntityImpl implements MetaDataEntity{
-	
+public class MetaDataEntityImpl implements MetaDataEntity {
+
 	private MetaExtent extent = null;
-	
+
 	private HashMap map = new HashMap();
-	
+
 	private MetaDataEntityCache cache = null;
-	
+
+	private String id = null;
+
 	private String type = null;
+
 	private String name = null;
-	
+
 	public MetaDataEntityImpl(MetaExtent extent) {
 		this.cache = new MetaDataEntityCache();
 		this.extent = extent;
 	}
-	
+
 	public String getID() {
-		return this.cache.getID();
+		return this.id;
 	}
-	
-	protected void setId(String id){
+
+	public void setID(String id) {
 		this.cache.setId(id);
+		this.id = id;
 	}
 
 	public String getName() {
@@ -44,12 +50,14 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 		query.setString("id", this.getID());
 		List list = query.list();
 		int size = list.size();
-		if(size == 1){
+		if (size == 1) {
 			return (String) list.get(0);
-		}else{
-			if(size <= 0){
+		}
+		else {
+			if (size <= 0) {
 				throw new RuntimeException();
-			}else{
+			}
+			else {
 				throw new RuntimeException();
 			}
 		}
@@ -60,11 +68,21 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 	}
 
 	public String getParentID() {
-		return null;
+		String hql = "select parentid from " + type + " where id = " + this.getID();
+		Session session = this.extent.getSession();
+		Query query = session.createQuery(hql);
+		List value = query.list();
+		return (String) value.get(0);
 	}
 
 	public MetaDataEntity getParent() {
-		return null;
+		String parentid = this.cache.getParentID();
+		if (parentid == null) {
+			parentid = this.getParentID();
+		}
+		MetaDataEntityImpl entity = new MetaDataEntityImpl(this.extent);
+		entity.setID(id);
+		return entity;
 	}
 
 	public String getTypeName() {
@@ -97,7 +115,7 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 	}
 
 	public void setParent(MetaDataEntity parent) {
-		
+
 	}
 
 	public void setType(String type) {
@@ -106,68 +124,70 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 	}
 
 	public void setTypeName() {
-		
+
 	}
 
 	public String[] getChildsWithType(String type) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public int getChildsCountWithType(String type) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	public Iterator getChildsWithTypeIterator(String type) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void addChild(MetaDataEntity child) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void bindChild(String childid) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public InputStream getContent() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void setContent(InputStream is) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void writeContent(OutputStream os) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public Map<String, Object> getProperties() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public Object getProperty(String key) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public String getStringProperty(String key, String dfvalue) {
-		if(!map.containsKey(key)){
+		if (!map.containsKey(key)) {
 			return dfvalue;
 		}
 		return (String) map.get(key);
 	}
 
 	public String getStringProperty(String key) {
-		return (String) map.get(key);
+		Session session = this.extent.getSession();
+		try {
+			MetaObject obj = (MetaObject) session.get(MetaObject.class, this.id);
+			MetaDataSlot slot = obj.getProperties().get(key);
+			return (String) slot.getValue();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			session.close();
+		}
 	}
 
 	public void addProperty(String key, Object value) {
@@ -182,8 +202,8 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 		return map.containsKey(key);
 	}
 
-	public void setProperty(String String, Object obj) {
-		
+	public void setProperty(String key, Object value) {
+		this.cache.setProperty(key, value);
 	}
 
 	public boolean isConsist() {
@@ -191,7 +211,7 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 	}
 
 	public int getIntProperty(String key, int dfvalue) {
-		if(!map.containsKey(key)){
+		if (!map.containsKey(key)) {
 			return dfvalue;
 		}
 		return (Integer) map.get(key);
@@ -206,7 +226,7 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 	}
 
 	public boolean getBoolProperty(String key, boolean dfvalue) {
-		if(!map.containsKey(key)){
+		if (!map.containsKey(key)) {
 			return dfvalue;
 		}
 		return (Boolean) map.get(key);
@@ -225,27 +245,23 @@ public class MetaDataEntityImpl implements MetaDataEntity{
 	}
 
 	public void getImportedEntities() {
-		
+
 	}
 
 	public String getAliasNameById(String id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public String getIdByAliasName(String aliasname) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public String hasAliasName(String aliasname) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void getImportingEntities() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public MetaDataEntity getModifyCache() {

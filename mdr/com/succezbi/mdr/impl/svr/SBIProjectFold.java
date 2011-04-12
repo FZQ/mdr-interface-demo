@@ -8,7 +8,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import com.succezbi.mdr.impl.core.Namespace;
 
 @Entity(name="SBIProjectFold")
-@Table(name="SBIProjectFold")
+@Table(name="SVR_SBIProjectFold")
 public class SBIProjectFold extends Namespace{
 
 	@Override

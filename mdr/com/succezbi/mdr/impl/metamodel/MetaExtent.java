@@ -54,7 +54,7 @@ public class MetaExtent implements Serializable{
 	private void registMetaClass(String classpath) throws ClassNotFoundException {
 		try {
 			Class<?> clazz = Class.forName(classpath);
-			log.info("注册类:" + classpath + "到hibernate");
+			System.out.println("注册类:" + classpath + "到hibernate");
 			configuration.addAnnotatedClass(clazz);
 		}
 		catch (ClassNotFoundException e) {
@@ -68,6 +68,7 @@ public class MetaExtent implements Serializable{
 	}
 
 	public void rebuild() {
+		System.out.println("载入新的元模型，重新注册hiberante定义类");
 		this.init();
 	}
 	

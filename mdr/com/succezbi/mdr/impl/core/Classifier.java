@@ -4,8 +4,10 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity(name = "Classifier")
+@Table(name="CORE_CLASSIFIER")
 public abstract class Classifier extends Namespace {
 	
 	@OneToMany(mappedBy="classifier")
