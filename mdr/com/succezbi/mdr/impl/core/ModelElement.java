@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.succezbi.mdr.impl.metamodel.MetaObject;
 
@@ -17,7 +19,7 @@ import com.succezbi.mdr.impl.metamodel.MetaObject;
  *
  */
 @Entity(name = "ModelElement")
-//@Table(name="CORE_MODELELEMENT", uniqueConstraints = { @UniqueConstraint(name = "uniquename", columnNames = "name") })
+@Table(name="CORE_MODELELEMENT", uniqueConstraints = { @UniqueConstraint(name = "uniquename", columnNames = "name") })
 public abstract class ModelElement extends MetaObject {
 
 	@Column(name = "NAME")

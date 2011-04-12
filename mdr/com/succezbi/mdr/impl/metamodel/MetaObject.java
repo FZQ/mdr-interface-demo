@@ -30,7 +30,7 @@ public abstract class MetaObject {
 	@GeneratedValue(generator = "idGenerator")
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	private String id = null;
-
+	
 	@OneToMany(mappedBy = "metaobject")
 	@MapKey(name = "dskey")
 	private Map<String, MetaDataSlot> properties = new HashMap<String, MetaDataSlot>();

@@ -5,9 +5,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.succezbi.mdr.impl.metamodel.MetaObject;
+
 @Entity(name="Feature")
-@Table(name="CORE_MODELELEMENT")
-public abstract class Feature extends ModelElement {
+@Table(name="CORE_FEATURE")
+public abstract class Feature extends MetaObject {
 
 	@ManyToOne
 	@JoinColumn(name = "ClassifierID")

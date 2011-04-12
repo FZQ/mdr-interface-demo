@@ -210,6 +210,7 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 		catch (Exception e) {
 			e.printStackTrace();
 			tx.rollback();
+			throw new RuntimeException(e);
 		}
 		finally {
 			session.close();
@@ -236,6 +237,7 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 			catch (Exception e) {
 				e.printStackTrace();
 				tx.rollback();
+				throw new RuntimeException(e);
 			}
 			finally {
 				session.close();

@@ -6,11 +6,11 @@ import javax.persistence.Table;
 
 import org.hibernate.criterion.DetachedCriteria;
 
-import com.succezbi.mdr.impl.core.Namespace;
+import com.succezbi.mdr.impl.core.ModelElement;
 
 @Entity(name = "SBIServer")
 @Table(name = "SVR_SBISERVER")
-public class SBIServer extends Namespace {
+public class SBIServer extends ModelElement {
 
 	@Column(name = "VERSION", length = 128)
 	private String version = null;

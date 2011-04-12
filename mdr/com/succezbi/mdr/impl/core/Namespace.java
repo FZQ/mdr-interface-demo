@@ -4,6 +4,8 @@ import java.util.Iterator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -19,6 +21,10 @@ public abstract class Namespace extends ModelElement {
 
 	@Column(name = "RGT")
 	private int right;
+	
+	@ManyToOne
+	@JoinColumn(name="parentid")
+	private Namespace parent = null;
 
 	@Transient
 	private String entityname = null;
@@ -129,5 +135,9 @@ public abstract class Namespace extends ModelElement {
 	public int compareTo(Namespace file) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public void setParent(Namespace parent) {
+		this.parent = parent;
 	}
 }
