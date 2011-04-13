@@ -48,7 +48,6 @@ public class MetaAssociation {
 	public MetaClass getType() {
 		return type;
 	}
-	
 
 	@Embeddable
 	public static class PrimaryKey implements Serializable {
@@ -56,11 +55,11 @@ public class MetaAssociation {
 		private static final long serialVersionUID = 6240535869652883673L;
 
 		@ManyToOne
-		@JoinColumn(name = "METACLASS", columnDefinition="varchar(128)")
+		@JoinColumn(name = "METACLASS", columnDefinition = "varchar(128)")
 		private MetaClass metaclass = null;
 
 		@ManyToOne
-		@JoinColumn(name = "TYPE", columnDefinition="varchar(128)")
+		@JoinColumn(name = "TYPE", columnDefinition = "varchar(128)")
 		private MetaClass type = null;
 
 		public void setMetaclass(MetaClass metaclass) {

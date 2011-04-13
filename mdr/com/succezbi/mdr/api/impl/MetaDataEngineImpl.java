@@ -246,7 +246,14 @@ public class MetaDataEngineImpl implements MetaDataEngine {
 	}
 
 	private MetaClass findMetaClass(Session session, String type) {
-		MetaClass cls = (MetaClass) session.load(MetaClass.class, type);
-		return cls;
+		String hql = "from MetaClass where classpath=:type";
+		Query query = session.createQuery(hql);
+		query.setString("type", type);
+		List values = query.list();
+		int size = values.size();
+		if(size == 0 || size > 1){
+			throw new RuntimeException("无法查找MetaClass，同一个classpath不能有多条记录");
+		}
+		return (MetaClass) values.get(0);
 	}
 }

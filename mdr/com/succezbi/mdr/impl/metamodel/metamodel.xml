@@ -44,10 +44,10 @@
 					<SBI:Attribute name="classpath" datatype="java.lang.String"/>
 					<SBI:Attribute name="name" datatype="java.lang.String"/>
 					<SBI:Attribute name="valuebyte" datatype="java.lang.Byte[]"/>
-					<SBI:Association name="pkg" value="" type=""/>
-					<SBI:Association name="superclass" value="" type=""/>
-					<SBI:Association name="attributes" value="" type=""/>
-					<SBI:Association name="associations" value="" type=""/>
+					<SBI:Association name="pkg" value="" type="MetaPackage"/>
+					<SBI:Association name="superclass" value="" type="MetaClass"/>
+					<SBI:Association name="attributes" value="" type="MetaAttribute"/>
+					<SBI:Association name="associations" value="" type="MetaAssociation"/>
 				</SBI:feature>
 			</SBI:class>
 			<!--
@@ -61,8 +61,8 @@
 				<SBI:table>MDR_METAPACKAGE</SBI:table>
 				<SBI:feature>
 					<SBI:Attribute name="name" datatype="java.lang.String"/>
-					<SBI:Association name="pkg" value="" type=""/>
-					<SBI:Association name="classes" value="" type=""/>
+					<SBI:Association name="pkg" value="" type="MetaPackage"/>
+					<SBI:Association name="classes" value="" type="MetaClass"/>
 				</SBI:feature>
 			</SBI:class>
 			<SBI:class name="MetaDataType">
@@ -77,8 +77,8 @@
 				<SBI:table>MDR_METAATTRIBUTE</SBI:table>
 				<SBI:feature>
 					<SBI:Attribute name="name" datatype="java.lang.String"/>
-					<SBI:Association name="metaclass" value="" type=""/>
-					<SBI:Association name="datatype" value="" type=""/>
+					<SBI:Association name="metaclass" value="" type="MetaClass"/>
+					<SBI:Association name="datatype" value="" type="MetaDataType"/>
 				</SBI:feature>
 			</SBI:class>
 			<!--

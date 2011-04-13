@@ -118,7 +118,8 @@ public class MetaDataEntityImpl implements MetaDataEntity {
 	}
 
 	public void setParent(MetaDataEntity parent) {
-
+		String parentid = parent.getID();
+		this.setParentID(parentid);
 	}
 
 	public void setType(String type) {

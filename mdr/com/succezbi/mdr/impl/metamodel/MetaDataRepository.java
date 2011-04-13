@@ -39,7 +39,20 @@ public class MetaDataRepository {
 	private void regist(Document doc, MetaExtent extent) {
 		//分析过程中缓存涉及的metaclass，最终映射好后再将之转入存储
 		this.registModels(doc, extent);
-		this.persistModels(doc, extent);
+		Session session = extent.getSession();
+		Transaction tx = session.beginTransaction();
+		try {
+			this.persistModels(doc, session);
+			tx.commit();
+		}
+		catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+			throw new RuntimeException("载入模板失败");
+		}
+		finally {
+			session.close();
+		}
 
 	}
 
@@ -49,21 +62,21 @@ public class MetaDataRepository {
 			throw new RuntimeException("模型文件根节点应该为xmi，而传入的模型文件根节点为" + root.getName());
 		}
 		List contents = root.elements("XMI.content");
-		for(int i = 0; i < contents.size(); i++){
+		for (int i = 0; i < contents.size(); i++) {
 			Element content = (Element) contents.get(i);
 			List models = content.elements("Model");
-			for(int j = 0; j < models.size();j++){
+			for (int j = 0; j < models.size(); j++) {
 				Element model = (Element) models.get(j);
 				List classes = model.elements("class");
 				this.registMetaClasses(classes, extent);
 			}
 			extent.rebuild();
 		}
-		
+
 	}
 
 	private void registMetaClasses(List classes, MetaExtent extent) {
-		for(int i = 0; i< classes.size();i++){
+		for (int i = 0; i < classes.size(); i++) {
 			Element clazz = (Element) classes.get(i);
 			Element classpath = clazz.element("classpath");
 			extent.addMetaClass(classpath.getText());
@@ -73,9 +86,9 @@ public class MetaDataRepository {
 	/**
 	 * 将元模型定义固化到hibernate存储层中
 	 * @param doc
-	 * @param extent
+	 * @param session
 	 */
-	private void persistModels(Document doc, MetaExtent extent) {
+	private void persistModels(Document doc, Session session) {
 		Element root = doc.getRootElement();
 		if (!"XMI".equalsIgnoreCase(root.getName())) {
 			throw new RuntimeException("模型文件根节点应该为xmi，而传入的模型文件根节点为" + root.getName());
@@ -91,41 +104,40 @@ public class MetaDataRepository {
 				//this.parseXmiExtensions(ele);
 			}
 			else if ("XMI.content".equalsIgnoreCase(name)) {
-				this.persistContent(ele, extent);
+				this.persistContent(ele, session);
 			}
 		}
 	}
 
-	private void persistContent(Element ele, MetaExtent extent) {
+	private void persistContent(Element ele, Session session) {
 		Iterator ei = ele.elementIterator();
 		while (ei.hasNext()) {
 			Element child = (Element) ei.next();
 			String childname = child.getName();
 			String prefix = child.getNamespacePrefix();
 			if ("SBI".equalsIgnoreCase(prefix) && "model".equalsIgnoreCase(childname)) {
-				this.persistModel(child, extent);
+				this.persistModel(child, session);
 			}
 		}
 	}
 
-	private void persistModel(Element ele, MetaExtent extent) {
+	private void persistModel(Element ele, Session session) {
 		String modelname = ele.attributeValue("name");
 		MetaPackage pkg = new MetaPackage();
-		pkg.setExtent(extent);
 		pkg.setName(modelname);
-		this.saveOrUpdateMetaPackage(pkg, extent);
+		pkg = this.saveOrUpdateMetaPackage(pkg, session);
 		Iterator ei = ele.elementIterator();
 		while (ei.hasNext()) {
 			Element child = (Element) ei.next();
 			String prefix = child.getNamespacePrefix();
 			String childname = child.getName();
 			if ("SBI".equalsIgnoreCase(prefix) && "class".equalsIgnoreCase(childname)) {
-				this.persistMetaClasses(child, pkg, extent);
+				this.persistMetaClasses(child, pkg, session);
 			}
 		}
 	}
 
-	private void persistMetaClasses(Element ele, MetaPackage pkg, MetaExtent extent) {
+	private void persistMetaClasses(Element ele, MetaPackage pkg, Session session) {
 		MetaClass metaclass = new MetaClass();
 		String classname = ele.attributeValue("name");
 		metaclass.setName(classname);
@@ -140,22 +152,28 @@ public class MetaDataRepository {
 				metaclass.setClasspath(path);
 			}
 			else if ("superclass".equalsIgnoreCase(name)) {
-				String superclassname = child.getText();
-				MetaClass superclass = new MetaClass();
-				superclass.setClasspath(superclassname);
-				this.saveOrUpdateMetaClass(superclass, extent);
-				metaclass.setSuperclass(superclass);
+				String hql = "from MetaClass where classpath=:path";
+				Query query = session.createQuery(hql);
+				query.setString("path", name);
+				List value = query.list();
+				int size = value.size();
+				if(size == 1){
+					MetaClass superclass = (MetaClass) value.get(0);
+					metaclass.setSuperclass(superclass);
+				}else{
+					
+				}
 			}
 		}
-		this.saveOrUpdateMetaClass(metaclass, extent);
+		metaclass = this.saveOrUpdateMetaClass(metaclass, session);
 		Iterator features = ele.elementIterator("feature");
-		while(features.hasNext()){
+		while (features.hasNext()) {
 			Element feature = (Element) features.next();
-			this.persistMetaFeatures(feature, metaclass, extent);
+			this.persistMetaFeatures(feature, pkg, metaclass, session);
 		}
 	}
 
-	private void persistMetaFeatures(Element ele, MetaClass metaclass, MetaExtent extent) {
+	private void persistMetaFeatures(Element ele, MetaPackage pkg, MetaClass metaclass, Session session) {
 		Iterator it = ele.elementIterator();
 		while (it.hasNext()) {
 			Element child = (Element) it.next();
@@ -166,29 +184,31 @@ public class MetaDataRepository {
 				System.out.println("Attribute:" + attrname);
 				attribute.setName(attrname);
 				attribute.setMetaclass(metaclass);
-				this.saveOrUpdateMetaAttribute(attribute, metaclass, extent);
+				this.saveOrUpdateMetaAttribute(attribute, metaclass, session);
+			}
+			else if ("Association".equalsIgnoreCase(name)) {
+				MetaAssociation association = new MetaAssociation();
+				association.setMetaclass(metaclass);
+				String assname = child.attributeValue("name");
+				System.out.println("Association:" + assname);
+				//association.set
+				String type = child.attributeValue("type");
+				//MetaClass typeclass = pkg.getMetaClassByName(type);
+				//association.setType(typeclass);
 			}
 		}
 	}
 
-	private void saveOrUpdateMetaPackage(MetaPackage pkg, MetaExtent extent) {
-		Session session = extent.getSession();
+	private MetaPackage saveOrUpdateMetaPackage(MetaPackage pkg, Session session) {
 		Query query = session.createQuery("from MetaPackage where name=:name");
 		query.setString("name", pkg.getName());
 		List value = query.list();
 		if (value.size() == 0) {
-			Transaction tx = session.beginTransaction();
-			try {
-				session.save(pkg);
-				tx.commit();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				tx.rollback();
-			}
-			finally {
-				session.close();
-			}
+			session.save(pkg);
+			return pkg;
+		}
+		else {
+			return (MetaPackage) value.get(0);
 		}
 	}
 
@@ -196,51 +216,34 @@ public class MetaDataRepository {
 	 * 注册MetaClass到数据库表MDR_METACLASS中，将之放置到数据库中，是为了方便通过数
 	 * 据库直接查询某个类型的所有元数据实例等
 	 * @param metaclass
-	 * @param extent
+	 * @param session
+	 * @return
 	 */
-	private void saveOrUpdateMetaClass(MetaClass metaclass, MetaExtent extent) {
-		Session session = extent.getSession();
+	private MetaClass saveOrUpdateMetaClass(MetaClass metaclass, Session session) {
 		Query query = session.createQuery("from MetaClass where classpath=:path");
 		String name = metaclass.getClasspath();
 		query.setString("path", name);
 		List value = query.list();
 		if (value.size() == 0) {
-			Transaction tx = session.beginTransaction();
-			try {
-				session.save(metaclass);
-				tx.commit();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				tx.rollback();
-			}
-			finally {
-				session.close();
-			}
+			session.save(metaclass);
+			return metaclass;
+		}
+		else {
+			return (MetaClass) value.get(0);
 		}
 	}
 
-	private void saveOrUpdateMetaAttribute(MetaAttribute attribute, MetaClass metaclass, MetaExtent extent) {
-		Session session = extent.getSession();
-		MetaAttribute.MetaAttributePK id = new MetaAttribute.MetaAttributePK();
+	private MetaAttribute saveOrUpdateMetaAttribute(MetaAttribute attribute, MetaClass metaclass, Session session) {
+		MetaAttribute.PrimaryKey id = new MetaAttribute.PrimaryKey();
 		String name = attribute.getName();
 		id.setName(name);
 		id.setMetaclass(metaclass);
 		Object value = session.get(MetaAttribute.class, id);
 		if (value == null) {
-			Transaction tx = session.beginTransaction();
-			try {
-				session.save(attribute);
-				tx.commit();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				tx.rollback();
-			}
-			finally {
-				session.close();
-			}
+			session.save(attribute);
+			return attribute;
 		}
+		return (MetaAttribute) value;
 	}
 
 }

@@ -1,13 +1,16 @@
 package com.succezbi.mdr.impl.metamodel;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.Session;
 
 @Entity(name="MetaPackage")
 @Table(name = "MDR_METAPACKAGE")
@@ -18,7 +21,8 @@ public class MetaPackage {
 	private String name = null;
 
 	@OneToMany(mappedBy = "pkg")
-	private List<MetaClass> classes = null;
+	@MapKey(name = "name")
+	private Map<String, MetaClass> classes = null;
 
 	@Transient
 	private MetaFactory factory = null;
@@ -40,13 +44,6 @@ public class MetaPackage {
 		return this.factory;
 	}
 
-	public void setClasses(List<MetaClass> classes) {
-		this.classes = classes;
-	}
-
-	public List<MetaClass> getClasses() {
-		return classes;
-	}
 
 	public void setName(String name) {
 		this.name = name;
@@ -62,5 +59,11 @@ public class MetaPackage {
 
 	public MetaExtent getExtent() {
 		return extent;
+	}
+
+	public MetaClass getMetaClassByName(String type) {
+		Session session = this.extent.getSession();
+		
+		return null;
 	}
 }

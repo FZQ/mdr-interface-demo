@@ -29,5 +29,4 @@ public class MetaDataType{
 		}
 		return Class.forName(this.classpath);
 	}
-
 }

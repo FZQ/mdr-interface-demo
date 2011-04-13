@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity(name = "MetaAttribute")
 @Table(name = "MDR_METAATTRIBUTE")
-@IdClass(MetaAttribute.MetaAttributePK.class)
+@IdClass(MetaAttribute.PrimaryKey.class)
 public class MetaAttribute implements Serializable {
 
 	private static final long serialVersionUID = 8931102204373393690L;
@@ -22,7 +22,7 @@ public class MetaAttribute implements Serializable {
 
 	@Id
 	private MetaClass metaclass = null;
-
+	
 	@ManyToOne
 	@JoinColumn(name = "DATATYPE")
 	private MetaDataType datatype = null;
@@ -61,7 +61,7 @@ public class MetaAttribute implements Serializable {
 	}
 
 
-	public static class MetaAttributePK implements Serializable{
+	public static class PrimaryKey implements Serializable{
 
 		private static final long serialVersionUID = -5942215460037342145L;
 
@@ -97,7 +97,6 @@ public class MetaAttribute implements Serializable {
 		public MetaClass getMetaclass() {
 			return metaclass;
 		}
-
 	}
 
 }

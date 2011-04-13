@@ -26,7 +26,7 @@ public abstract class ModelElement extends MetaObject {
 	private String name = null;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="parentid")
+	@JoinColumn(name="PARENT")
 	private ModelElement parent = null;
 
 	public void setName(String name) {

@@ -23,7 +23,7 @@ public abstract class Namespace extends ModelElement {
 	private int right;
 	
 	@ManyToOne
-	@JoinColumn(name="parentid")
+	@JoinColumn(name="PARENT")
 	private Namespace parent = null;
 
 	@Transient

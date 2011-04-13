@@ -14,21 +14,37 @@
 				<SBI:classpath>com.succezbi.mdr.impl.core.Classifier</SBI:classpath>
 				<SBI:table>MDR_CLASSIFIER</SBI:table>
 				<SBI:superclass>com.succezbi.mdr.impl.core.Namespace</SBI:superclass>
+				<SBI:feature>
+					<SBI:Association name="features" value="" type=""/>
+				</SBI:feature>
 			</SBI:class>
 			<SBI:class name="Feature">
 				<SBI:classpath>com.succezbi.mdr.impl.core.Feature</SBI:classpath>
 				<SBI:table>MDR_FEATURE</SBI:table>
 				<SBI:superclass>com.succezbi.mdr.impl.core.ModelElement</SBI:superclass>
+				<SBI:feature>
+					<SBI:Association name="classifier" value="" type=""/>
+				</SBI:feature>
 			</SBI:class>
 			<SBI:class name="ModelElement">
 				<SBI:classpath>com.succezbi.mdr.impl.core.ModelElement</SBI:classpath>
 				<SBI:table>MDR_MODELELEMENT</SBI:table>
 				<SBI:superclass>com.succezbi.mdr.impl.metamodel.MetaObject</SBI:superclass>
+				<SBI:feature>
+					<SBI:Attribute name="name" datatype="java.lang.String"/>
+					<SBI:Association name="parent" value="" type=""/>
+				</SBI:feature>
 			</SBI:class>
 			<SBI:class name="Namespace">
 				<SBI:classpath>com.succezbi.mdr.impl.core.Namespace</SBI:classpath>
 				<SBI:table>MDR_NAMESPACE</SBI:table>
 				<SBI:superclass>com.succezbi.mdr.impl.core.ModelElement</SBI:superclass>
+				<SBI:feature>
+					<SBI:Attribute name="name" datatype="java.lang.String"/>
+					<SBI:Attribute name="lft" datatype="java.lang.Integer"/>
+					<SBI:Attribute name="rgt" datatype="java.lang.Integer"/>
+					<SBI:Association name="parent" value="" type=""/>
+				</SBI:feature>
 			</SBI:class>
 		</SBI:Model>
 	</XMI.content>

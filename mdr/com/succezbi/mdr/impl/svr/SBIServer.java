@@ -18,6 +18,9 @@ public class SBIServer extends ModelElement {
 	@Column(name = "IP", length = 17)
 	private String ip = null;
 
+	@Column(name = "description", length = 256)
+	private String description = null;
+
 	@Override
 	protected String getEntityName() {
 		return "SBIServer";
@@ -42,6 +45,14 @@ public class SBIServer extends ModelElement {
 
 	public String getIp() {
 		return ip;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 }

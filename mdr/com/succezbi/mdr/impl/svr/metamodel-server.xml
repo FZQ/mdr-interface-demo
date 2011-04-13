@@ -16,23 +16,24 @@
 				<SBI:superclass>com.succezbi.mdr.impl.metamodel.MetaObject</SBI:superclass>
 				<SBI:feature>
 					<SBI:Attribute name="version" datatype="java.lang.String"/>
+					<SBI:Attribute name="description" datatype="java.lang.String"/>
 					<SBI:Attribute name="ip" datatype="java.lang.String"/>
 				</SBI:feature>
 			</SBI:class>
 			<SBI:class name="SBIProject">
 				<SBI:classpath>com.succezbi.mdr.impl.svr.SBIProject</SBI:classpath>
 				<SBI:table>MDR_SBIPROJECT</SBI:table>
-				<SBI:superclass>MetaObject</SBI:superclass>
+				<SBI:superclass>com.succezbi.mdr.impl.metamodel.MetaObject</SBI:superclass>
 			</SBI:class>
 			<SBI:class name="SBIProjectFold">
 				<SBI:classpath>com.succezbi.mdr.impl.svr.SBIProjectFold</SBI:classpath>
 				<SBI:table>MDR_SBIPROJECTFOLD</SBI:table>
-				<SBI:superclass>MetaObject</SBI:superclass>
+				<SBI:superclass>com.succezbi.mdr.impl.metamodel.MetaObject</SBI:superclass>
 			</SBI:class>
 			<SBI:class name="Jdbc">
 				<SBI:classpath>com.succezbi.mdr.impl.svr.Jdbc</SBI:classpath>
 				<SBI:table>MDR_JDBC</SBI:table>
-				<SBI:superclass>MetaObject</SBI:superclass>
+				<SBI:superclass>com.succezbi.mdr.impl.metamodel.MetaObject</SBI:superclass>
 			</SBI:class>
 		</SBI:Model>
 	</XMI.content>
